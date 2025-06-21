@@ -1,10 +1,10 @@
-import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
+import React from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  requiredRole?: 'admin' | 'doctor' | 'nurse' | 'receptionist';
+  requiredRole?: "admin" | "doctor" | "nurse" | "receptionist";
 }
 
 export default function ProtectedRoute({
@@ -13,8 +13,7 @@ export default function ProtectedRoute({
 }: ProtectedRouteProps) {
   const { user, profile, loading } = useAuth();
   const location = useLocation();
-
-  if (loading) {
+  if (loading || (user && !profile)) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="text-center">
@@ -35,7 +34,7 @@ export default function ProtectedRoute({
     requiredRole &&
     profile &&
     profile.role !== requiredRole &&
-    profile.role !== 'admin'
+    profile.role !== "admin"
   ) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
