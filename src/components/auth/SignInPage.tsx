@@ -1,37 +1,37 @@
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { Heart, Eye, EyeOff, Mail, Lock, AlertCircle } from 'lucide-react'
-import { useAuth } from '../../contexts/AuthContext'
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Heart, Eye, EyeOff, Mail, Lock, AlertCircle } from "lucide-react";
+import { useAuth } from "../../contexts/AuthContext";
 
 export default function SignInPage() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  
-  const { signIn } = useAuth()
-  const navigate = useNavigate()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const { signIn } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
+    e.preventDefault();
+    setLoading(true);
+    setError("");
 
     try {
-      const { error } = await signIn(email, password)
-      
+      const { error } = await signIn(email, password);
+
       if (error) {
-        setError(error.message || 'Failed to sign in')
+        setError(error.message || "Failed to sign in");
       } else {
-        navigate('/dashboard')
+        navigate("/dashboard");
       }
     } catch (err) {
-      setError('An unexpected error occurred')
+      setError("An unexpected error occurred");
     }
-    
-    setLoading(false)
-  }
+
+    setLoading(false);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-slate-50 flex items-center justify-center p-4">
@@ -44,7 +44,9 @@ export default function SignInPage() {
             </div>
           </div>
           <h1 className="text-3xl font-bold text-slate-900">Welcome back</h1>
-          <p className="text-slate-600 mt-2">Sign in to your ClinicPro account</p>
+          <p className="text-slate-600 mt-2">
+            Sign in to your ClinicPro account
+          </p>
         </div>
 
         {/* Sign In Form */}
@@ -58,7 +60,10 @@ export default function SignInPage() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-slate-700 mb-2"
+              >
                 Email Address
               </label>
               <div className="relative">
@@ -78,7 +83,10 @@ export default function SignInPage() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-2">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-slate-700 mb-2"
+              >
                 Password
               </label>
               <div className="relative">
@@ -87,7 +95,7 @@ export default function SignInPage() {
                 </div>
                 <input
                   id="password"
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -115,7 +123,10 @@ export default function SignInPage() {
                   type="checkbox"
                   className="h-4 w-4 text-sky-600 focus:ring-sky-500 border-slate-300 rounded"
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-slate-700">
+                <label
+                  htmlFor="remember-me"
+                  className="ml-2 block text-sm text-slate-700"
+                >
                   Remember me
                 </label>
               </div>
@@ -138,15 +149,18 @@ export default function SignInPage() {
                   Signing in...
                 </div>
               ) : (
-                'Sign In'
+                "Sign In"
               )}
             </button>
           </form>
 
           <div className="mt-8 text-center">
             <p className="text-slate-600">
-              Don't have an account?{' '}
-              <Link to="/signup" className="text-sky-600 hover:text-sky-700 font-medium">
+              Don't have an account?{" "}
+              <Link
+                to="/signup"
+                className="text-sky-600 hover:text-sky-700 font-medium"
+              >
                 Sign up
               </Link>
             </p>
@@ -161,5 +175,5 @@ export default function SignInPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

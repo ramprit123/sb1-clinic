@@ -3,14 +3,14 @@ import {
   Routes,
   Route,
   Navigate,
-} from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
-import ProtectedRoute from './components/auth/ProtectedRoute';
-import SignInPage from './components/auth/SignInPage';
-import SignUpPage from './components/auth/SignUpPage';
-import ForgotPasswordPage from './components/auth/ForgotPasswordPage';
-import ResetPasswordPage from './components/auth/ResetPasswordPage';
-import Layout from './components/Layout';
+} from "react-router-dom";
+import { AuthProvider } from "./contexts/AuthContext";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+import SignInPage from "./components/auth/SignInPage";
+import SignUpPage from "./components/auth/SignUpPage";
+import ForgotPasswordPage from "./components/auth/ForgotPasswordPage";
+import ResetPasswordPage from "./components/auth/ResetPasswordPage";
+import Layout from "./components/Layout";
 
 function App() {
   return (

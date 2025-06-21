@@ -35,42 +35,54 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!supabase) {
-      console.error(
-        "Supabase client not initialized. Please check your environment variables."
-      );
-      setLoading(false);
-      return;
-    }
-
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchUserProfile(session.user.id);
-      } else {
+    const initializeAuth = async () => {
+      if (!supabase) {
+        console.error(
+          "Supabase client not initialized. Please check your environment variables."
+        );
         setLoading(false);
+        return;
       }
-    });
 
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log("Auth state changed:", event, session?.user?.email);
+      // Get initial session
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       setSession(session);
       setUser(session?.user ?? null);
-
       if (session?.user) {
         await fetchUserProfile(session.user.id);
       } else {
-        setProfile(null);
         setLoading(false);
       }
-    });
 
-    return () => subscription.unsubscribe();
+      // Listen for auth changes
+      const {
+        data: { subscription },
+      } = supabase.auth.onAuthStateChange(async (event, session) => {
+        console.log("Auth state changed:", event, session?.user?.email);
+        setSession(session);
+        setUser(session?.user ?? null);
+
+        if (session?.user) {
+          await fetchUserProfile(session.user.id);
+        } else {
+          setProfile(null);
+          setLoading(false);
+        }
+      });
+
+      return () => subscription.unsubscribe();
+    };
+
+    const cleanupPromise = initializeAuth();
+
+    // Cleanup function for useEffect
+    return () => {
+      cleanupPromise.then((cleanup) => {
+        if (typeof cleanup === "function") cleanup();
+      });
+    };
   }, []);
 
   const fetchUserProfile = async (userId: string) => {
@@ -105,7 +117,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     try {
       setLoading(true);
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
